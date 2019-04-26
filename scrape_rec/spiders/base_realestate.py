@@ -19,6 +19,9 @@ class BaseRealEstateSpider(scrapy.Spider):
     def process_ad_date(self, ad_date):
         return ad_date
 
+    def process_price(self, price):
+        return price
+
     def process_item_additional_fields(self, item, response):
         return item
 
@@ -39,6 +42,9 @@ class BaseRealEstateSpider(scrapy.Spider):
         else:
             ad_date = datetime.now()
         item['posted_date'] = ad_date
+
+        price = response.xpath(self.price_xpath).extract_first()
+        item['price'], item['currency'] = self.process_price(price)
 
         available_attributes = self.get_attribute_values(response)
         for attr, site_value in self.attributes_mapping.items():

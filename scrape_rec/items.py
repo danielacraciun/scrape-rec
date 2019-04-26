@@ -23,3 +23,5 @@ class RealEstateRentedApartmentItem(scrapy.Item):
     source_website = scrapy.Field()
     source_offer = scrapy.Field()
     neighborhood = scrapy.Field()
+    price = scrapy.Field()
+    currency = scrapy.Field()

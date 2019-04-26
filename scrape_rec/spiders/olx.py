@@ -18,6 +18,7 @@ class OlxSpider(BaseRealEstateSpider):
     title_xpath = '//h1/text()'
     description_xpath = '//div[@id="textContent"]/text()'
     date_xpath = '//em/text()'
+    price_xpath = '//div[@class="price-label"]/strong/text()'
     ground_floor = 'Parter'
 
     def get_attribute_values(self, response):
@@ -32,3 +33,7 @@ class OlxSpider(BaseRealEstateSpider):
     def process_ad_date(self, ad_date):
         processed_date = ' '.join(ad_date.split()).split(' ', 2)[-1]
         return dateparser.parse(processed_date)
+
+    def process_price(self, price):
+        full_price = price.split(' ')
+        return int(full_price[0]), full_price[1]
