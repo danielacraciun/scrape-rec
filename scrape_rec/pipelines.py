@@ -37,7 +37,8 @@ class NeighborhoodFinderPipeline(object):
         'sigma',
         'piata unirii',
         'dorobantilor',
-        'the office'
+        'the office',
+        'plopilor',
     ]
 
     def process_item(self, item, spider):

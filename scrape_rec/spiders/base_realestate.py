@@ -1,3 +1,4 @@
+from datetime import datetime
 from itertools import takewhile
 
 import scrapy
@@ -32,8 +33,11 @@ class BaseRealEstateSpider(scrapy.Spider):
         description = self.process_description(description)
         item['description'] = description
 
-        ad_date = response.xpath(self.date_xpath).extract_first().strip()
-        ad_date = self.process_ad_date(ad_date)
+        if self.date_xpath:
+            ad_date = response.xpath(self.date_xpath).extract_first().strip()
+            ad_date = self.process_ad_date(ad_date)
+        else:
+            ad_date = datetime.now()
         item['posted_date'] = ad_date
 
         available_attributes = self.get_attribute_values(response)
