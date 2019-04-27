@@ -51,7 +51,7 @@ class RealestateApartment(base):
 
 def get_postgres_session():
     # To fix db table changes errors enable once
-    db.execute('DROP TABLE realestate;')
+    # db.execute('DROP TABLE realestate;')
     base.metadata.create_all(db)
     Session = sa.orm.sessionmaker(db)  
     return Session()
