@@ -48,6 +48,7 @@ class NeighborhoodFinderPipeline(object):
                 return item
 
         item['neighborhood'] = 'not found'
+
         return item
 
 
