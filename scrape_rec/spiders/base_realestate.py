@@ -58,7 +58,9 @@ class BaseRealEstateSpider(scrapy.Spider):
                 value = self.base_floors_mapping.get(value)
             elif value and attr in self.convert_to_int:
                 value = int(''.join(takewhile(str.isdigit, value)))
-            item[attr] = value
+
+            if value:
+                item[attr] = value
 
         # in order to extract additional fields
         item = self.process_item_additional_fields(item, response)

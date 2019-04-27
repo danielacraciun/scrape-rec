@@ -46,3 +46,22 @@ class OlxSpider(BaseRealEstateSpider):
         if not full_price:
             return 0, None
         return int(full_price[0]), self.currency_mapping.get(full_price[1])
+
+    def process_item_additional_fields(self, item, response):
+        list_of_title_words = item['title'].split()
+        try:
+            room_index = list_of_title_words.index('camere')
+        except ValueError:
+            room_index = None
+
+        if room_index and room_index > 0:
+            rooms = list_of_title_words[room_index - 1]
+            if rooms.isdigit():
+                item['number_of_rooms'] = int(rooms)
+
+        desc = item['description'].lower()
+        item['terrace'] = any(word in desc for word in ['terasa', 'balcon', 'balcoane'])
+        item['parking'] = any(word in desc for word in ['parcare', 'garaj'])
+        item['cellar'] = any(word in desc for word in ['pivnita', 'boxa'])
+
+        return item
