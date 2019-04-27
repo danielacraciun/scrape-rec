@@ -32,6 +32,8 @@ class RealestateApartment(base):
     title = sa.Column(sa.String, nullable=False) 
     description = sa.Column(sa.String, nullable=False)
     posted_date = sa.Column(sa.DateTime, nullable=False)
+    price = sa.Column(sa.Integer, nullable=False)
+    currency = sa.Column(sa.String, nullable=False)
 
     # Nullable
     partitioning = sa.Column(sa.String)
@@ -44,12 +46,12 @@ class RealestateApartment(base):
     cellar = sa.Column(sa.Boolean)
     source_website = sa.Column(sa.String)
     source_offer = sa.Column(sa.String)
-    neightbourhood = sa.Column(sa.String)
+    neighborhood = sa.Column(sa.String)
 
 
 def get_postgres_session():
     # To fix db table changes errors enable once
-    # db.execute('DROP TABLE realestate;')
+    db.execute('DROP TABLE realestate;')
     base.metadata.create_all(db)
     Session = sa.orm.sessionmaker(db)  
     return Session()

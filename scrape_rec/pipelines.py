@@ -58,6 +58,10 @@ class PostgresPipeline(object):
         self.session = get_postgres_session()
 
     def process_item(self, item, spider):
+        # TODO: Move this in validation schema
+        if not item.get('posted_date'):
+            return
+
         # TODO: don't add if already exists for double check in case redis fails
 
         entry = RealestateApartment(**item) 

@@ -22,7 +22,7 @@ class BaseRealEstateSpider(scrapy.Spider):
         return ad_date
 
     def process_price(self, price):
-        return price, 'EUR'
+        return int(price), 'EUR'
 
     def process_item_additional_fields(self, item, response):
         return item

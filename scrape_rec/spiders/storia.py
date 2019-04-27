@@ -29,12 +29,12 @@ class StoriaSpider(BaseRealEstateSpider):
             for item in response.xpath('//section[@class="section-overview"]//ul/li/text()').extract()
         ]
         value_list = response.xpath('//section[@class="section-overview"]//ul/li/strong/text()').extract()
-        return {
-            attr: val for attr, val in zip(attr_list, value_list)
-        }
+        return {attr: val for attr, val in zip(attr_list, value_list)}
 
     def process_price(self, price):
-        return ''.join(takewhile(lambda x: x.isdigit(), ''.join(price.split()))), 'EUR'
+        price = ''.join(takewhile(lambda x: x.isdigit(), ''.join(price.split())))
+
+        return int(price) if price else 0, 'EUR'
 
     def process_ad_date(self, ad_date):
         if not ad_date:
