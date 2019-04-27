@@ -43,11 +43,13 @@ class RealestateApartment(base):
     parking = sa.Column(sa.Boolean)
     cellar = sa.Column(sa.Boolean)
     source_website = sa.Column(sa.String)
-    source_offer = sa.Column(sa.Boolean)
+    source_offer = sa.Column(sa.String)
     neightbourhood = sa.Column(sa.String)
 
 
 def get_postgres_session():
+    # To fix db table changes errors enable once
+    # db.execute('DROP TABLE realestate;')
     base.metadata.create_all(db)
     Session = sa.orm.sessionmaker(db)  
     return Session()

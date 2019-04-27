@@ -24,11 +24,12 @@ class RealEstateRentedApartmentItem(JsonSchemaItem):
             },
             'currency': {
                 'description': 'The creation date of the listing or if not found the scrape date',
-                'type': 'string'
+                'type': 'string',
+                # 'pattern': 'EUR|RON|USD'
             },
             'posted_date': {
                 'description': 'The creation date of the listing or if not found the scrape date',
-                'type': 'string'
+                # 'type': 'object'
             },
             'description': {
                 'description': 'Apartment description',
@@ -40,7 +41,8 @@ class RealEstateRentedApartmentItem(JsonSchemaItem):
             },
             'surface': {
                 'description': 'Surface in mp^2',
-                'type': 'string'
+                'type': 'integer',
+                'minimum': 0
             },
             'building_year': {
                 'description': 'The building construition date',
@@ -74,7 +76,7 @@ class RealEstateRentedApartmentItem(JsonSchemaItem):
             },
             'source_offer': {
                 'description': 'Is or not sold by an agency',
-                'type': 'boolean'
+                'type': 'string'
             },
             'neighborhood': {
                 'description': 'The area',
