@@ -49,8 +49,8 @@ class BaseRealEstateSpider(scrapy.Spider):
         available_attributes = self.get_attribute_values(response)
         for attr, site_value in self.attributes_mapping.items():
             value = available_attributes.get(site_value)
-            if attr == 'floor' and value == self.ground_floor:
-                value = 0
+            if attr == 'floor' and value in self.base_floors_mapping.keys():
+                value = self.base_floors_mapping.get(value)
             elif value and attr in self.convert_to_int:
                 value = int(''.join(takewhile(str.isdigit, value)))
             item[attr] = value

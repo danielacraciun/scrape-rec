@@ -19,7 +19,14 @@ class OlxSpider(BaseRealEstateSpider):
     description_xpath = '//div[@id="textContent"]/text()'
     date_xpath = '//em/text()'
     price_xpath = '//div[@class="price-label"]/strong/text()'
-    ground_floor = 'Parter'
+    base_floors_mapping = {
+        'Parter': 0,
+        'Demisol': -1,
+    }
+    currency_mapping = {
+        '€': 'EUR',
+        'lei': 'RON',
+    }
 
     def get_attribute_values(self, response):
         attr_table = response.css('table.item')
@@ -36,4 +43,6 @@ class OlxSpider(BaseRealEstateSpider):
 
     def process_price(self, price):
         full_price = price.split(' ')
-        return int(full_price[0]), full_price[1]
+        if not full_price:
+            return 0, None
+        return int(full_price[0]), self.currency_mapping.get(full_price[1])
