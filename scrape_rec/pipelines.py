@@ -60,23 +60,7 @@ class PostgresPipeline(object):
     def process_item(self, item, spider):
         # TODO: don't add if already exists for double check in case redis fails
 
-        entry = RealestateApartment(
-            fingerprint=item.get('fingerprint'),
-            title=item.get('title'),
-            description=item.get('description'),
-            posted_date=item.get('posted_date'),
-            partitioning=item.get('partitioning'),
-            surface=item.get('surface'),
-            building_year=item.get('building_year'),
-            floor=item.get('floor'),
-            number_of_rooms=item.get('number_of_rooms'),
-            terrace=item.get('terrace'),
-            parking=item.get('parking'),
-            cellar=item.get('cellar'),
-            source_website=item.get('source_website'),
-            source_offer=item.get('source_offer'),
-            neightbourhood=item.get('neightbourhood'),
-        ) 
+        entry = RealestateApartment(**item) 
 
         self.session.add(entry)  
         self.session.commit()
