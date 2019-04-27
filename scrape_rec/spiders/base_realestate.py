@@ -27,6 +27,7 @@ class BaseRealEstateSpider(scrapy.Spider):
 
     def process_link(self, response):
         item = RealEstateRentedApartmentItem()
+        item['source_website'] = self.name
 
         title = response.xpath(self.title_xpath).extract_first().strip()
         title = self.process_title(title)
