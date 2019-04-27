@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+from scrape_rec.utils import get_postgres_session, RealestateApartment
 
 
 class NeighborhoodFinderPipeline(object):
@@ -53,4 +48,25 @@ class NeighborhoodFinderPipeline(object):
                 return item
 
         item['neighborhood'] = 'not found'
+
+        return item
+
+
+class PostgresPipeline(object):
+
+    def __init__(self):
+        self.session = get_postgres_session()
+
+    def process_item(self, item, spider):
+        # TODO: Move this in validation schema
+        if not item.get('posted_date'):
+            return
+
+        # TODO: don't add if already exists for double check in case redis fails
+
+        entry = RealestateApartment(**item) 
+
+        self.session.add(entry)  
+        self.session.commit()
+
         return item

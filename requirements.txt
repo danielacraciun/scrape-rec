@@ -1,2 +1,7 @@
 dateparser==0.7.1
 Scrapy==1.6.0
+scrapy-jsonschema==0.1.0
+scrapy-redis==0.6.8
+psycopg2==2.8.2
+SQLAlchemy==1.3.3
+

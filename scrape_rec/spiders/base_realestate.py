@@ -2,6 +2,8 @@ from datetime import datetime
 from itertools import takewhile
 
 import scrapy
+from scrapy.utils.request import request_fingerprint
+
 from scrape_rec.items import RealEstateRentedApartmentItem
 
 
@@ -20,7 +22,7 @@ class BaseRealEstateSpider(scrapy.Spider):
         return ad_date
 
     def process_price(self, price):
-        return price
+        return int(price), 'EUR'
 
     def process_item_additional_fields(self, item, response):
         return item
@@ -28,6 +30,8 @@ class BaseRealEstateSpider(scrapy.Spider):
     def process_link(self, response):
         item = RealEstateRentedApartmentItem()
         item['source_website'] = self.name
+
+        item['fingerprint'] = request_fingerprint(response.request)
 
         title = response.xpath(self.title_xpath).extract_first().strip()
         title = self.process_title(title)
@@ -66,4 +70,4 @@ class BaseRealEstateSpider(scrapy.Spider):
             yield response.follow(link, callback=self.process_link)
 
         next_link = response.xpath(self.next_link_xpath).extract_first()
-        yield response.follow(next_link)
+        yield response.follow(next_link, dont_filter=True)
