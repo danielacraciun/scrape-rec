@@ -1,3 +1,5 @@
+from unidecode import unidecode
+
 from scrape_rec.utils import get_postgres_session, RealestateApartment
 
 
@@ -10,7 +12,6 @@ class NeighborhoodFinderPipeline(object):
         'dambul rotund',
         'gara',
         'horea'
-        'gheorgheni',
         'manastur',
         'grigorescu',
         'gruia',
@@ -34,16 +35,26 @@ class NeighborhoodFinderPipeline(object):
         'dorobantilor',
         'the office',
         'plopilor',
+        'calea turzii',
+        'baciu',
+        'gheorgheni',
+        'interservisan',
+        'centrala',
+        'ultracentral',
+        'europa',
+        'muzeului',
+        'calea baciului',
+        'titulescu'
     ]
 
     def process_item(self, item, spider):
         for neighborhood in self.neighborhoods:
-            if neighborhood in item['title'].lower():
+            if neighborhood in unidecode(item['title'].lower()):
                 item['neighborhood'] = neighborhood
                 return item
 
         for neighborhood in self.neighborhoods:
-            if neighborhood in item['description'].lower():
+            if neighborhood in unidecode(item['description'].lower()):
                 item['neighborhood'] = neighborhood
                 return item
 
