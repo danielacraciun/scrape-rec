@@ -10,7 +10,6 @@ class NeighborhoodFinderPipeline(object):
         'dambul rotund',
         'gara',
         'horea'
-        'gheorgheni',
         'manastur',
         'grigorescu',
         'gruia',
@@ -34,6 +33,16 @@ class NeighborhoodFinderPipeline(object):
         'dorobantilor',
         'the office',
         'plopilor',
+        'calea turzii',
+        'baciu',
+        'gheorgheni',
+        'interservisan',
+        'centrala',
+        'ultracentral',
+        'europa',
+        'muzeului',
+        'calea baciului',
+        'titulescu'
     ]
 
     def process_item(self, item, spider):
