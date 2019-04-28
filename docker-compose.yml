@@ -1,0 +1,25 @@
+version: '3'
+services:
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=chungus
+      - POSTGRES_DB=realestate
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - 5435:5432
+
+  scraper:
+    image: scraper
+    volumes:
+      - httpcache:/var/lib/httpcache/ 
+    network_mode: host
+    entrypoint: python3 start_crawler.py
+
+volumes:
+  pgdata:
+    external: true
+  httpcache:
+    external: true

@@ -69,15 +69,19 @@ class PostgresPipeline(object):
         self.session = get_postgres_session()
 
     def process_item(self, item, spider):
-        # TODO: Move this in validation schema
-        if not item.get('posted_date'):
-            return
+        fingerprint_filer = self.session.query(RealestateApartment).filter_by(
+            fingerprint=item['fingerprint'])
+        if fingerprint_filer.all():
+            spider.logger.info('Already scraped item {}'.format(item['fingerprint']))
+            return item
 
-        # TODO: don't add if already exists for double check in case redis fails
+        spider.logger.info('New item found {}'.format(item['fingerprint']))
 
         entry = RealestateApartment(**item) 
 
         self.session.add(entry)  
         self.session.commit()
+
+        spider.logger.info('New item saved in postgres {}'.format(item['fingerprint']))
 
         return item
