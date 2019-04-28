@@ -20,7 +20,10 @@ class StoriaSpider(BaseRealEstateSpider):
     title_xpath = '//h1/text()'
     description_xpath = '//section[@class="section-description"]//text()'
     date_xpath = '//div[contains(text(), "Data publicarii")]/text()'   
-    ground_floor = 'Parter'
+    base_floors_mapping = {
+        'Parter': 0,
+        'Demisol': -1,
+    }
     price_xpath = '//div[@class="css-c0ipkw-AdHeader"]/text()'
 
     def get_attribute_values(self, response):
@@ -42,3 +45,14 @@ class StoriaSpider(BaseRealEstateSpider):
 
         raw_date = ad_date.split(':')[0]
         return dateparser.parse(raw_date)
+
+    def process_item_additional_fields(self, item, response):
+        desc = item['description'].lower()
+        item['terrace'] = any(word in desc for word in ['terasa', 'balcon', 'balcoane'])
+        item['parking'] = any(word in desc for word in ['parcare', 'garaj'])
+        item['cellar'] = any(word in desc for word in ['pivnita', 'boxa'])
+
+        item['source_offer'] = response.xpath(
+            '//div[@class="css-asr5zc-AdAgency-className"]/ul/li/text()').extract_first().strip()
+
+        return item
