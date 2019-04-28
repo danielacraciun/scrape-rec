@@ -41,10 +41,11 @@ class BaseRealEstateSpider(scrapy.Spider):
         description = self.process_description(description)
         item['description'] = description
 
+        ad_date = None
         if self.date_xpath:
             ad_date = response.xpath(self.date_xpath).extract_first().strip()
             ad_date = self.process_ad_date(ad_date)
-        else:
+        if not ad_date:
             ad_date = datetime.now()
         item['posted_date'] = ad_date
 
