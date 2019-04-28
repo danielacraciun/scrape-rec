@@ -39,12 +39,11 @@ class NeighborhoodFinderPipeline(object):
         'baciu',
         'gheorgheni',
         'interservisan',
-        'centrala',
         'ultracentral',
         'europa',
         'muzeului',
         'calea baciului',
-        'titulescu'
+        'titulescu',
     ]
 
     def process_item(self, item, spider):
