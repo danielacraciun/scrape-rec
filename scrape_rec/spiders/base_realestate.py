@@ -73,4 +73,4 @@ class BaseRealEstateSpider(scrapy.Spider):
             yield response.follow(link, callback=self.process_link)
 
         next_link = response.xpath(self.next_link_xpath).extract_first()
-        yield response.follow(next_link, dont_filter=True)
+        yield response.follow(next_link, dont_filter=True, meta={'dont_cache': True})
