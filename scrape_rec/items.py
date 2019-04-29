@@ -80,6 +80,10 @@ class RealEstateRentedApartmentItem(JsonSchemaItem):
                 'description': 'The area',
                 'type': 'string'
             },
+            'link': {
+                'description': 'The link to the ad',
+                'type': 'string'
+            },
         },
         'required': ['fingerprint', 'title', 'price', 'posted_date']
     }

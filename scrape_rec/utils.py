@@ -20,8 +20,8 @@ db_string = 'postgres://{user}:{password}@{host}:{port}/{db}'.format(
 )
 
 db = sa.create_engine(db_string)
-
 base = declarative_base()
+
 
 class RealestateApartment(base):   
     __tablename__ = POSTGRES_DB 
@@ -47,6 +47,7 @@ class RealestateApartment(base):
     source_website = sa.Column(sa.String)
     source_offer = sa.Column(sa.String)
     neighborhood = sa.Column(sa.String)
+    link = sa.Column(sa.String)
 
 
 def get_postgres_session():

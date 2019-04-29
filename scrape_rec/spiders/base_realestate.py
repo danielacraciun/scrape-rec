@@ -30,6 +30,7 @@ class BaseRealEstateSpider(scrapy.Spider):
     def process_link(self, response):
         item = RealEstateRentedApartmentItem()
         item['source_website'] = self.name
+        item['link'] = response.url
 
         item['fingerprint'] = request_fingerprint(response.request)
 
