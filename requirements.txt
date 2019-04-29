@@ -1,3 +1,4 @@
+# Scraping
 dateparser==0.7.1
 Scrapy==1.6.0
 scrapy-jsonschema==0.1.0
@@ -5,3 +6,9 @@ spidermon[monitoring,validation]
 psycopg2==2.8.2
 SQLAlchemy==1.3.3
 Unidecode==1.0.23
+
+# Data processing
+jupyter==1.0.0
+pandas==0.24.2
+matplotlib==3.0.3
+seaborn==0.9.0
