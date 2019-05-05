@@ -6,7 +6,7 @@ from scrape_rec.spiders.base_realestate import BaseRealEstateSpider
 
 class StoriaSpider(BaseRealEstateSpider):
     name = "storia"
-    start_urls = ['https://www.storia.ro/inchiriere/apartament/cluj/cluj-napoca/cluj-napoca/',]
+    start_urls = ['https://www.storia.ro/inchiriere/apartament/cluj/cluj-napoca/cluj-napoca/?search%5Border%5D=created_at_first%3Adesc',]
     item_links_xpath = '//h3/a[@data-featured-name="listing_no_promo"]/@href'
     next_link_xpath = '//a[@data-dir="next"]/@href'
     attributes_mapping = {

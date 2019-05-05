@@ -59,7 +59,7 @@ class BaseRealEstateSpider(scrapy.Spider):
             if attr == 'floor' and value in self.base_floors_mapping.keys():
                 value = self.base_floors_mapping.get(value)
             elif value and attr in self.convert_to_int:
-                value = int(''.join(takewhile(str.isdigit, value)))
+                value = int(''.join(takewhile(str.isdigit, value)) or 0)
 
             if value:
                 item[attr] = value
@@ -74,4 +74,5 @@ class BaseRealEstateSpider(scrapy.Spider):
             yield response.follow(link, callback=self.process_link)
 
         next_link = response.xpath(self.next_link_xpath).extract_first()
-        yield response.follow(next_link, dont_filter=True, meta={'dont_cache': True})
+        if next_link:
+            yield response.follow(next_link, dont_filter=True, meta={'dont_cache': True})
