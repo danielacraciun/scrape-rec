@@ -15,3 +15,6 @@
 
 ### To run scrapers only (make sure you have postgres and httpcache volume up first):
     docker run --network=host -v httpcache:/var/lib/httpcache/ scraper
+
+### Restoring psql backups
+    cat <dump_name>.sql | docker exec -i <docker-postgres-container> psql -U postgres -W -d realestate
