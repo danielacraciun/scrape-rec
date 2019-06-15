@@ -1,11 +1,12 @@
 import uuid
+from os import environ
 
 import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base  
 
 
 POSTGRES_USER = 'postgres'
-POSTGRES_PASSWORD = 'chungus'
+POSTGRES_PASSWORD = environ.get('POSTGRES_PASSWORD')
 POSTGRES_HOST = 'localhost'
 POSTGRES_PORT = 5435
 POSTGRES_DB = 'realestate'
