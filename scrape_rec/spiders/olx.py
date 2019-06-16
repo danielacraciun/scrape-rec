@@ -28,6 +28,9 @@ class OlxSpider(BaseRealEstateSpider):
         'lei': 'RON',
     }
 
+    def is_product_url(self, url):
+        return '/oferta/' in url
+
     def get_attribute_values(self, response):
         attr_table = response.css('table.item')
         return {

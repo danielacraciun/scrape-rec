@@ -6,8 +6,20 @@ from scrapy.utils.request import request_fingerprint
 
 from scrape_rec.items import RealEstateRentedApartmentItem
 
+from scrape_rec.utils import get_all_urls_from_httpcache
+
 
 class BaseRealEstateSpider(scrapy.Spider):
+
+    def start_requests(self):
+        if hasattr(self, 'httpcache_only'):
+            for index, url in enumerate(get_all_urls_from_httpcache(self.name)):
+                if self.is_product_url(url):
+                    self.logger.info(
+                        'Processing {} url from cache {}'.format(index, url))
+                    yield scrapy.Request(url, callback=self.process_link)
+        else:
+            yield from super().start_requests()
 
     def get_attribute_values(self, response):
         raise NotImplementedError

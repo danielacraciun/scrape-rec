@@ -26,6 +26,9 @@ class StoriaSpider(BaseRealEstateSpider):
     }
     price_xpath = '//div[@class="css-c0ipkw-AdHeader"]/text()'
 
+    def is_product_url(self, url):
+        return '/oferta/' in url
+
     def get_attribute_values(self, response):
         attr_list = [
             item.strip().replace(':', '')
