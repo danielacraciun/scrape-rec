@@ -1,10 +1,17 @@
+from urllib.parse import urlparse
+
 import dateparser
 from scrape_rec.spiders.base_realestate import BaseRealEstateSpider
 
 
 class OlxSpider(BaseRealEstateSpider):
     name = "olx"
-    start_urls = ['https://www.olx.ro/imobiliare/apartamente-garsoniere-de-inchiriat/cluj-napoca/',]
+    start_urls = [
+        'https://www.olx.ro/imobiliare/apartamente-garsoniere-de-inchiriat/1-camera/cluj-napoca/',
+        'https://www.olx.ro/imobiliare/apartamente-garsoniere-de-inchiriat/2-camere/cluj-napoca/',
+        'https://www.olx.ro/imobiliare/apartamente-garsoniere-de-inchiriat/3-camere/cluj-napoca/',
+        'https://www.olx.ro/imobiliare/apartamente-garsoniere-de-inchiriat/4-camere/cluj-napoca/'
+    ]
     item_links_xpath = '//a[contains(@class, "detailsLink") and not(contains(@class, "detailsLinkPromoted"))]/@href'
     next_link_xpath = '//a[@data-cy="page-link-next"]/@href'
     attributes_mapping = {
@@ -51,16 +58,8 @@ class OlxSpider(BaseRealEstateSpider):
         return int(full_price[0]), self.currency_mapping.get(full_price[1])
 
     def process_item_additional_fields(self, item, response):
-        list_of_title_words = item['title'].split()
-        try:
-            room_index = list_of_title_words.index('camere')
-        except ValueError:
-            room_index = None
-
-        if room_index and room_index > 0:
-            rooms = list_of_title_words[room_index - 1]
-            if rooms.isdigit():
-                item['number_of_rooms'] = int(rooms)
+        urlpath = urlparse(response.meta['start_url']).path
+        item['number_of_rooms'] = int(urlpath.split('/')[3][0])
 
         desc = item['description'].lower()
         item['terrace'] = any(word in desc for word in ['terasa', 'balcon', 'balcoane'])

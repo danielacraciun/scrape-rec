@@ -83,7 +83,7 @@ class BaseRealEstateSpider(scrapy.Spider):
     def parse(self, response):
         links = response.xpath(self.item_links_xpath).extract()
         for link in links:
-            yield response.follow(link, callback=self.process_link)
+            yield response.follow(link, callback=self.process_link, meta={'start_url': response.url})
 
         next_link = response.xpath(self.next_link_xpath).extract_first()
         if next_link:
