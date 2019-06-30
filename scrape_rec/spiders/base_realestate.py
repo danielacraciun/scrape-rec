@@ -11,6 +11,11 @@ from scrape_rec.utils import get_all_urls_from_httpcache
 
 class BaseRealEstateSpider(scrapy.Spider):
 
+    user_agent = (
+        'Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us)'
+        'AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405'
+    )
+
     def start_requests(self):
         if hasattr(self, 'httpcache_only'):
             for index, url in enumerate(get_all_urls_from_httpcache(self.name)):
