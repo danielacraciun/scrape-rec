@@ -11,11 +11,6 @@ from scrape_rec.utils import get_all_urls_from_httpcache
 
 class BaseRealEstateSpider(scrapy.Spider):
 
-    user_agent = (
-        'Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us)'
-        'AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405'
-    )
-
     def start_requests(self):
         if hasattr(self, 'httpcache_only'):
             for index, url in enumerate(get_all_urls_from_httpcache(self.name)):
@@ -38,8 +33,8 @@ class BaseRealEstateSpider(scrapy.Spider):
     def process_ad_date(self, ad_date):
         return ad_date
 
-    def process_price(self, price):
-        return int(price), 'EUR'
+    def process_price(self, response):
+        return int(response.xpath(self.price_xpath).extract_first()), 'EUR'
 
     def process_item_additional_fields(self, item, response):
         return item
@@ -67,8 +62,7 @@ class BaseRealEstateSpider(scrapy.Spider):
             ad_date = datetime.now()
         item['posted_date'] = ad_date
 
-        price = response.xpath(self.price_xpath).extract_first()
-        item['price'], item['currency'] = self.process_price(price)
+        item['price'], item['currency'] = self.process_price(response)
 
         available_attributes = self.get_attribute_values(response)
         for attr, site_value in self.attributes_mapping.items():
@@ -91,5 +85,11 @@ class BaseRealEstateSpider(scrapy.Spider):
             yield response.follow(link, callback=self.process_link, meta={'start_url': response.url})
 
         next_link = response.xpath(self.next_link_xpath).extract_first()
-        if next_link:
-            yield response.follow(next_link, dont_filter=True, meta={'dont_cache': True})
+        if not next_link:
+            self.logger.error(
+                'Invalid next listing page xpath {}'.format(response.url))
+            return
+
+        yield response.follow(
+            next_link, dont_filter=True, meta={'dont_cache': True}
+        )

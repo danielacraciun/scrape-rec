@@ -1,3 +1,4 @@
+import re
 from itertools import takewhile
 
 import dateparser
@@ -24,7 +25,8 @@ class StoriaSpider(BaseRealEstateSpider):
         'Parter': 0,
         'Demisol': -1,
     }
-    price_xpath = '//div[@class="css-c0ipkw-AdHeader"]/text()'
+
+    price_regex = re.compile(r'\"price\":\"(\d+)\"')
 
     def is_product_url(self, url):
         return '/oferta/' in url
@@ -37,10 +39,21 @@ class StoriaSpider(BaseRealEstateSpider):
         value_list = response.xpath('//section[@class="section-overview"]//ul/li/strong/text()').extract()
         return {attr: val for attr, val in zip(attr_list, value_list)}
 
-    def process_price(self, price):
-        price = ''.join(takewhile(lambda x: x.isdigit(), ''.join(price.split())))
+    def process_price(self, response):
+        price_script = ''.join(response.xpath(
+            "//script[contains(text(), '\"price\"')]/text()").getall())
+        if not price_script:
+            self.logger.warning(
+                'Price script could not be extracted {}'.format(response.url))
+            return 0, 'EUR'
 
-        return int(price) if price else 0, 'EUR'
+        price_match = self.price_regex.search(price_script)
+        if not price_match:
+            self.logger.error(
+                'Price regex failed {}'.format(response.url))
+            return 0, 'EUR'
+
+        return int(price_match.group(1)), 'EUR'
 
     def process_ad_date(self, ad_date):
         if not ad_date:
