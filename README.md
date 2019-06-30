@@ -52,3 +52,4 @@ For debugging, to run scrapers manually:
 
 ### This is the crontab command, set this in a user's crontab (the user must be in the docker group):
     * * * * * run-one docker run --network=host -v httpcache:/var/lib/httpcache/ scraper
+    * * * * * run-one /path/to/backup.sh
