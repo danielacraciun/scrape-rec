@@ -7,3 +7,4 @@ COPY . .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 CMD [ "scrapy", "crawl" , "storia", "-a", "httpcache_only=chungus"]
+CMD [ "scrapy", "crawl" , "olx", "-a", "httpcache_only=chungus"]

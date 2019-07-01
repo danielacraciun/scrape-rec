@@ -51,10 +51,13 @@ class OlxSpider(BaseRealEstateSpider):
         processed_date = ' '.join(ad_date.split()).split(' ', 2)[-1]
         return dateparser.parse(processed_date)
 
-    def process_price(self, price):
+    def process_price(self, response):
+        price = response.xpath(self.price_xpath).extract_first()
+
         full_price = price.split(' ')
         if not full_price:
             return 0, None
+
         return int(full_price[0]), self.currency_mapping.get(full_price[1])
 
     def process_item_additional_fields(self, item, response):

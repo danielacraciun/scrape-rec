@@ -1,0 +1,1 @@
+docker exec -t -u postgres scrape-rec_postgres_1 pg_dumpall -c > ~/backups/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql

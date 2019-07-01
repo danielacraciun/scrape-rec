@@ -1,4 +1,5 @@
 import os
+import gzip
 import uuid
 import pickle
 
@@ -64,6 +65,10 @@ def get_metadata(rpath):
     with open(os.path.join(rpath, 'pickled_meta'), 'rb') as f: 
         return pickle.load(f) 
 
+def get_gzip_metadata(rpath):
+    with gzip.open(os.path.join(rpath, 'pickled_meta'), 'rb') as f: 
+        return pickle.load(f)
+
 def get_response_from_cache_by_id(rpath):
     metadata = get_metadata(rpath)
 
@@ -95,5 +100,9 @@ def get_all_urls_from_httpcache(spider_name):
     root_dir = os.path.join(HTTPCACHE_DIR, spider_name)
     for current_root, directories, files in os.walk(root_dir): 
         if files and not directories: 
-            meta = get_metadata(current_root)
+            try:
+                meta = get_metadata(current_root)
+            # Metadata may be encoded using gzip
+            except:
+                meta = get_gzip_metadata(current_root)
             yield meta.get('url')
