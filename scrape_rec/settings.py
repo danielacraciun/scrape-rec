@@ -39,3 +39,7 @@ HTTPCACHE_DIR = '/var/lib/httpcache/'
 
 # Save some space
 HTTPCACHE_GZIP = True
+
+# Statsd settings
+STATSD_ENABLED = True
+EXTENSIONS['scrapy_statsd_extension.StatsdExtension'] = 600

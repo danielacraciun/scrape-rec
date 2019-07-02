@@ -1,0 +1,9 @@
+FROM python:3
+
+WORKDIR /project
+ 
+COPY scrapy-statsd/ scrapy-statsd
+
+RUN pip3 install scrapy-statsd/
+
+CMD [ "python3", "scrapy-statsd/test_client.py" ]
