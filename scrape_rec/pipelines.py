@@ -70,10 +70,11 @@ class PostgresPipeline(object):
         self.session = get_postgres_session()
 
     def process_item(self, item, spider):
-        fingerprint_filer = self.session.query(RealestateApartment).filter_by(
-            fingerprint=item['fingerprint'])
-        if fingerprint_filer.all():
-            spider.logger.info('Already scraped item {}'.format(item['fingerprint']))
+        fingerprint_filter = self.session.query(RealestateApartment).filter_by(
+            title=item['title'])
+
+        if fingerprint_filter.all():
+            spider.logger.info('Already scraped item {}'.format(item['title']))
             return item
 
         spider.logger.info('New item found {}'.format(item['fingerprint']))
