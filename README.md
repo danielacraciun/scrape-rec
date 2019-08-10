@@ -1,4 +1,7 @@
 # Deployment:
+Remember to set POSTGRES_PASSWORD as environment variable before starting!
+
+Run: `export POSTGRES_PASSWORD=<pass>`
 
 #### Zero to hero steps:
 1. Install the following:

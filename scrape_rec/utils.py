@@ -2,13 +2,13 @@ import os
 import gzip
 import uuid
 import pickle
-
 import sqlalchemy as sa
-from sqlalchemy.ext.declarative import declarative_base  
+from sqlalchemy.ext.declarative import declarative_base
+from os import environ
 
 
 POSTGRES_USER = 'postgres'
-POSTGRES_PASSWORD = 'chungus'
+POSTGRES_PASSWORD = environ.get('POSTGRES_PASSWORD')
 POSTGRES_HOST = 'localhost'
 POSTGRES_PORT = 5435
 POSTGRES_DB = 'realestate'
