@@ -13,6 +13,13 @@ ITEM_PIPELINES = {
     'scrape_rec.pipelines.PostgresPipeline': 400
 }
 
+# Be nice!
+DOWNLOAD_DELAY = 3 # Average time between sending requests
+RANDOMIZE_DOWNLOAD_DELAY = True # Default for 0.5 to 1.5 times DOWNLOAD_DELAY
+AUTOTHROTTLE_ENABLED = True # Enable built-in autothrottle extension
+AUTOTHROTTLE_TARGET_CONCURRENCY = 1 # Number of requests to send in paralel
+CLOSESPIDER_ITEMCOUNT = 1000 # Stop after about 1000 items
+
 # Spidermon - monitoring tool
 SPIDERMON_ENABLED = True
 SPIDERMON_SPIDER_CLOSE_MONITORS = (
