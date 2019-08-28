@@ -8,6 +8,7 @@ class LajumateSpider(BaseRealEstateSpider):
     name = "lajumate"
     start_urls = [
         'https://lajumate.ro/anunturi_apartamente-de-inchiriat_in-cluj-napoca-cj.html',
+        'https://lajumate.ro/anunturi_garsoniere-de-inchiriat_in-cluj-napoca-cj.html',
     ]
     item_links_xpath = '//a[contains(@class, "main_items")]/@href'
     next_link_xpath = '//link[@rel="next"]/@href'
@@ -30,7 +31,7 @@ class LajumateSpider(BaseRealEstateSpider):
     }
 
     def is_product_url(self, url):
-        return '/oferta/' in url
+        return 'anunturi' not in url
 
     def get_attribute_values(self, response):
         attr_list = response.xpath('//div[@id="extra-fields"]/div/span/text()').extract()
