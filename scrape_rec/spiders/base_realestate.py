@@ -56,8 +56,13 @@ class BaseRealEstateSpider(scrapy.Spider):
 
         ad_date = None
         if self.date_xpath:
-            ad_date = response.xpath(self.date_xpath).extract_first().strip()
-            ad_date = self.process_ad_date(ad_date)
+            try:
+                ad_date = response.xpath(self.date_xpath).extract_first().strip()
+                ad_date = self.process_ad_date(ad_date)
+            except:
+                self.logger.error('Problem with date xpath, falling back to current date')
+                ad_date = None
+
         if not ad_date:
             ad_date = datetime.now()
         item['posted_date'] = ad_date
