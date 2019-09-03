@@ -48,19 +48,21 @@ class NeighborhoodFinderPipeline(object):
     ]
 
     def process_item(self, item, spider):
-        cleaned_title = unidecode(item['title']).lower()
-        for neighborhood in self.neighborhoods:
-            if neighborhood in cleaned_title:
-                item['neighborhood'] = neighborhood
-                return item
+        if not item.get('neighborhood'):
+            cleaned_title = unidecode(item['title']).lower()
+            for neighborhood in self.neighborhoods:
+                if neighborhood in cleaned_title:
+                    item['neighborhood'] = neighborhood
+                    return item
 
-        cleaned_desc = unidecode(item['description']).lower()
-        for neighborhood in self.neighborhoods:
-            if neighborhood in cleaned_desc:
-                item['neighborhood'] = neighborhood
-                return item
+            cleaned_desc = unidecode(item['description']).lower()
+            for neighborhood in self.neighborhoods:
+                if neighborhood in cleaned_desc:
+                    item['neighborhood'] = neighborhood
+                    return item
 
-        item['neighborhood'] = 'not found'
+            item['neighborhood'] = 'not found'
+
         return item
 
 
