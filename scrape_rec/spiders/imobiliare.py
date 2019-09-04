@@ -11,15 +11,15 @@ class ImobiliareRoSpider(BaseRealEstateSpider):
     item_links_xpath = '//h2[@class="titlu-anunt hidden-xs"]/a/@href'
     next_link_xpath = '//a[@class="inainte butonpaginare"]/@href'
     attributes_mapping = {
-        'partitioning': 'Compartimentare:',
-        'surface': 'Suprafaţă utilă:',
-        'building_year': 'An construcţie:',
-        'floor': 'Etaj:',
-        'number_of_rooms': 'Nr. camere:',
-        'terrace': 'Nr. balcoane:',
-        'parking': 'Nr. locuri parcare:',
+        'partitioning': 'Compartimentare',
+        'surface': 'Suprafaţă utilă',
+        'building_year': 'An construcţie',
+        'floor': 'Etaj',
+        'number_of_rooms': 'Nr. camere',
+        'terrace': 'Nr. balcoane',
+        'parking': 'Nr. locuri parcare',
     }
-    convert_to_int = ['surface', 'number_of_rooms']
+    convert_to_int = ['surface', 'number_of_rooms', 'floor']
     title_xpath = '//h1/text()'
     description_xpath = '//div[@id="b_detalii_text"]/p//text()'
     date_xpath = '//span[@class="data-actualizare"]/text()'
@@ -49,7 +49,7 @@ class ImobiliareRoSpider(BaseRealEstateSpider):
                 continue
             clean_value_list.append(value)
 
-        return {attr: val for attr, val in zip(attr_list, value_list)}
+        return {attr: val for attr, val in zip(attr_list, clean_value_list)}
 
     def process_price(self, response):
         return (
@@ -75,5 +75,8 @@ class ImobiliareRoSpider(BaseRealEstateSpider):
         item['source_offer'] = (
             'Agentie' if response.xpath('//div[contains(@class, "agentie")]').extract() else 'Proprietar'
         )
+        if not item.get('description'):
+            raw_alternative_description = response.xpath('//div[@id="b_detalii_specificatii"]/p/text()').extract()
+            item['description'] = ''.join(map(lambda line: line.strip(), raw_alternative_description))
 
         return item

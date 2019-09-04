@@ -12,7 +12,7 @@ ITEM_PIPELINES = {
 }
 
 # Be nice!
-DOWNLOAD_DELAY = 5  # Average time between sending requests
+DOWNLOAD_DELAY = 3  # Average time between sending requests
 RANDOMIZE_DOWNLOAD_DELAY = True  # Default for 0.5 to 1.5 times DOWNLOAD_DELAY
 AUTOTHROTTLE_ENABLED = True  # Enable built-in autothrottle extension
 AUTOTHROTTLE_TARGET_CONCURRENCY = 1  # Number of requests to send in paralel
@@ -29,7 +29,7 @@ EXTENSIONS = {
 
 # Caching - cache responses on disk to save tons of time
 # Only cache product pages, not listing pages to ensure we get to all products!
-# HTTPCACHE_ENABLED = True
+HTTPCACHE_ENABLED = True
 
 # Make sure this is set to the same value as the
 # docker-compose volume 'httpcache' for persistance

@@ -19,7 +19,7 @@ class StoriaSpider(BaseRealEstateSpider):
     }
     convert_to_int = ['surface', 'floor', 'number_of_rooms']
     title_xpath = '//h1/text()'
-    description_xpath = '//section[@class="section-description"]//text()'
+    description_xpath = '//section[@class="section-description"]/div//text()'
     date_xpath = '//div[contains(text(), "Data publicarii")]/text()'   
     base_floors_mapping = {
         'Parter': 0,
@@ -68,7 +68,8 @@ class StoriaSpider(BaseRealEstateSpider):
         item['parking'] = any(word in desc for word in ['parcare', 'garaj'])
         item['cellar'] = any(word in desc for word in ['pivnita', 'boxa'])
 
-        item['source_offer'] = response.xpath(
-            '//div[@class="css-asr5zc-AdAgency-className"]/ul/li/text()').extract_first().strip()
+        item['source_offer'] = (
+            'Agentie' if response.xpath('//div[ul[li[contains(text(), "Agentie")]]]//text()').get() else 'Proprietar'
+        )
 
         return item
