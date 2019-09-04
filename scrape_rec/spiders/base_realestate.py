@@ -57,8 +57,8 @@ class BaseRealEstateSpider(scrapy.Spider):
         ad_date = None
         if self.date_xpath:
             try:
-                ad_date = response.xpath(self.date_xpath).extract_first().strip()
-                ad_date = self.process_ad_date(ad_date)
+                ad_date = response.xpath(self.date_xpath).extract()
+                ad_date = self.process_ad_date(' '.join(ad_date))
             except:
                 self.logger.error('Problem with date xpath, falling back to current date')
                 ad_date = None
@@ -68,7 +68,6 @@ class BaseRealEstateSpider(scrapy.Spider):
         item['posted_date'] = ad_date
 
         item['price'], item['currency'] = self.process_price(response)
-
         available_attributes = self.get_attribute_values(response)
         for attr, site_value in self.attributes_mapping.items():
             value = available_attributes.get(site_value)
