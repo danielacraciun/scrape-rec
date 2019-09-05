@@ -83,9 +83,11 @@ class PostgresPipeline(object):
 
         entry = RealestateApartment(**item) 
 
-        self.session.add(entry)  
-        self.session.commit()
-
-        spider.logger.info('New item saved in postgres {}'.format(item['fingerprint']))
+        try:
+            self.session.add(entry)
+            self.session.commit()
+            spider.logger.info('New item saved in postgres {}'.format(item['fingerprint']))
+        except:
+            self.session.rollback()
 
         return item
