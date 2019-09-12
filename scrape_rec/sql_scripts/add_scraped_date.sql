@@ -1,0 +1,2 @@
+ALTER TABLE realestate
+ADD COLUMN scraped_date TIMESTAMP WITHOUT TIME ZONE;
