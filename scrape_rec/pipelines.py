@@ -1,6 +1,6 @@
 from unidecode import unidecode
 
-from scrape_rec.utils import get_postgres_session, RealestateApartment
+from scrape_rec.db_wrapper import get_postgres_session, RealestateApartment
 
 
 class NeighborhoodFinderPipeline(object):

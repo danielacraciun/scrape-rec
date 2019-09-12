@@ -28,7 +28,10 @@ class RealEstateRentedApartmentItem(JsonSchemaItem):
                 'pattern': 'EUR|RON|USD'
             },
             'posted_date': {
-                'description': 'The creation date of the listing or if not found the scrape date',
+                'description': 'The creation date of the listing',
+            },
+            'scraped_date': {
+                'description': 'Date at which the item was scraped',
             },
             'description': {
                 'description': 'Apartment description',
