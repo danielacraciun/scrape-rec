@@ -31,6 +31,7 @@ class PiataAZSpider(BaseRealEstateSpider):
     base_floors_mapping = {
         'parter': 0,
         'demisol': -1,
+        'mansarda': 99,
     }
     currency_mapping = {
         'euro': 'EUR',
@@ -81,6 +82,8 @@ class PiataAZSpider(BaseRealEstateSpider):
         desc = item['description'].lower()
         if not item.get('terrace'):
             item['terrace'] = any(word in desc for word in ['terasa', 'balcon', 'balcoane'])
+        else:
+            item['terrace'] = True if int(item['terrace']) > 0 else False
         if not item.get('parking'):
             item['parking'] = any(word in desc for word in ['parcare', 'garaj'])
         else:

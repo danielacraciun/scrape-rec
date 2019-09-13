@@ -1,6 +1,5 @@
 import os
 import gzip
-
 import pickle
 from scrapy.http import Headers
 from scrapy.responsetypes import responsetypes

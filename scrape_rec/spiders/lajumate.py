@@ -57,4 +57,6 @@ class LajumateSpider(BaseRealEstateSpider):
         item['parking'] = any(word in desc for word in ['parcare', 'garaj'])
         item['cellar'] = any(word in desc for word in ['pivnita', 'boxa'])
 
+        item['source_offer'] = response.xpath('//div[@class="account_right"]/span/text()').extract_first()
+
         return item

@@ -75,7 +75,7 @@ class BaseRealEstateSpider(scrapy.Spider):
             elif value and attr in self.convert_to_int:
                 value = int(''.join(takewhile(str.isdigit, value)) or 0)
 
-            if value:
+            if value is not None:
                 item[attr] = value
 
         # in order to extract additional fields
