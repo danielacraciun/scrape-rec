@@ -88,5 +88,5 @@ class RealEstateRentedApartmentItem(JsonSchemaItem):
                 'type': 'string'
             },
         },
-        'required': ['fingerprint', 'title', 'price', 'posted_date']
+        'required': ['fingerprint', 'title', 'price', 'scraped_date']
     }
