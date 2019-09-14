@@ -52,7 +52,6 @@ class BaseRealEstateSpider(scrapy.Spider):
             loader.add_value(attr, value)
 
         loader = self.load_particular_fields(loader, response)
-
         yield loader.load_item()
 
     def parse(self, response):
