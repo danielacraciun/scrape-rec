@@ -29,7 +29,7 @@ EXTENSIONS = {
 
 # Caching - cache responses on disk to save tons of time
 # Only cache product pages, not listing pages to ensure we get to all products!
-HTTPCACHE_ENABLED = True
+# HTTPCACHE_ENABLED = True
 
 # Make sure this is set to the same value as the
 # docker-compose volume 'httpcache' for persistance

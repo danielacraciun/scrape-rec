@@ -63,8 +63,7 @@ class BaseRealEstateSpider(scrapy.Spider):
                 self.logger.error('Problem with date xpath, falling back to current date')
                 ad_date = None
 
-        if not ad_date:
-            ad_date = datetime.now()
+        item['scraped_date'] = datetime.now()
         item['posted_date'] = ad_date
 
         item['price'], item['currency'] = self.process_price(response)
