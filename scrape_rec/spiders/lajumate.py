@@ -1,6 +1,4 @@
-from urllib.parse import urlparse
-
-import dateparser
+from scrape_rec.loaders import LajumateAdLoader
 from scrape_rec.spiders.base_realestate import BaseRealEstateSpider
 
 
@@ -12,6 +10,7 @@ class LajumateSpider(BaseRealEstateSpider):
     ]
     item_links_xpath = '//a[contains(@class, "main_items")]/@href'
     next_link_xpath = '//link[@rel="next"]/@href'
+
     attributes_mapping = {
         'neighborhood': 'Zona',
         'partitioning': 'Compartimentare',
@@ -20,15 +19,15 @@ class LajumateSpider(BaseRealEstateSpider):
         'floor': 'Etaj',
         'number_of_rooms': 'Număr camere',
     }
-    convert_to_int = ['surface', 'floor', 'number_of_rooms']
+
     title_xpath = '//h1/text()'
     description_xpath = '//p[@itemprop="description"]/text()'
     date_xpath = '//span[@id="date"]/text()'
     price_xpath = '//span[@id="price"]/text()'
-    base_floors_mapping = {
-        'parter': 0,
-        'demisol': -1,
-    }
+    currency_xpath = '//span[@id="price"]/text()'
+    source_offer_xpath = '//div[@class="account_right"]/span/text()'
+
+    item_loader_class = LajumateAdLoader
 
     def is_product_url(self, url):
         return 'anunturi' not in url
@@ -41,22 +40,6 @@ class LajumateSpider(BaseRealEstateSpider):
             value_list += values_header
         return {attr: val for attr, val in zip(attr_list, value_list)}
 
-    def process_ad_date(self, ad_date):
-        if not ad_date:
-            return
-
-        return dateparser.parse(ad_date)
-
-    def process_price(self, response):
-        full_price = response.xpath(self.price_xpath).extract_first().split(' ')
-        return int(full_price[0]), full_price[1]
-
-    def process_item_additional_fields(self, item, response):
-        desc = item['description'].lower()
-        item['terrace'] = any(word in desc for word in ['terasa', 'balcon', 'balcoane'])
-        item['parking'] = any(word in desc for word in ['parcare', 'garaj'])
-        item['cellar'] = any(word in desc for word in ['pivnita', 'boxa'])
-
-        item['source_offer'] = response.xpath('//div[@class="account_right"]/span/text()').extract_first()
-
-        return item
+    def load_particular_fields(self, loader, response):
+        loader.add_xpath('source_offer', self.source_offer_xpath)
+        return loader

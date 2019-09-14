@@ -11,7 +11,7 @@ class NeighborhoodFinderPipeline(object):
         'centru',
         'dambul rotund',
         'gara',
-        'horea'
+        'horea',
         'manastur',
         'grigorescu',
         'gruia',
@@ -48,20 +48,37 @@ class NeighborhoodFinderPipeline(object):
     ]
 
     def process_item(self, item, spider):
-        if not item.get('neighborhood'):
-            cleaned_title = unidecode(item['title']).lower()
-            for neighborhood in self.neighborhoods:
-                if neighborhood in cleaned_title:
-                    item['neighborhood'] = neighborhood
-                    return item
+        if item.get('neighborhood'):
+            return item
 
-            cleaned_desc = unidecode(item['description']).lower()
-            for neighborhood in self.neighborhoods:
-                if neighborhood in cleaned_desc:
-                    item['neighborhood'] = neighborhood
-                    return item
+        cleaned_title = unidecode(item['title'])
+        for neighborhood in self.neighborhoods:
+            if neighborhood in cleaned_title:
+                item['neighborhood'] = neighborhood
+                return item
 
-            item['neighborhood'] = 'not found'
+        cleaned_desc = unidecode(item['description'])
+        for neighborhood in self.neighborhoods:
+            if neighborhood in cleaned_desc:
+                item['neighborhood'] = neighborhood
+                return item
+
+        item['neighborhood'] = 'not found'
+        return item
+
+
+class DescriptionAnalysePipeline(object):
+    def process_item(self, item, spider):
+        cleaned_desc = unidecode(item['description'])
+
+        if item.get('parking') is None:
+            item['parking'] = any(word in cleaned_desc for word in ['parcare', 'garaj'])
+
+        if item.get('terrace') is None:
+            item['terrace'] = any(word in cleaned_desc for word in ['terasa', 'balcon', 'balcoane'])
+
+        if item.get('cellar') is None:
+            item['cellar'] = any(word in cleaned_desc for word in ['pivnita', 'boxa'])
 
         return item
 
