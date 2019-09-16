@@ -7,6 +7,7 @@ ROBOTSTXT_OBEY = True
 
 ITEM_PIPELINES = {
     'scrape_rec.pipelines.NeighborhoodFinderPipeline': 100,
+    'scrape_rec.pipelines.DescriptionAnalysePipeline': 200,
     'scrapy_jsonschema.JsonSchemaValidatePipeline': 300,
     'scrape_rec.pipelines.PostgresPipeline': 400
 }
@@ -16,7 +17,7 @@ DOWNLOAD_DELAY = 3  # Average time between sending requests
 RANDOMIZE_DOWNLOAD_DELAY = True  # Default for 0.5 to 1.5 times DOWNLOAD_DELAY
 AUTOTHROTTLE_ENABLED = True  # Enable built-in autothrottle extension
 AUTOTHROTTLE_TARGET_CONCURRENCY = 1  # Number of requests to send in paralel
-CLOSESPIDER_ITEMCOUNT = 100  # Stop after about 1000 items
+CLOSESPIDER_ITEMCOUNT = 100  # Stop after about 100 items
 
 # Spidermon - monitoring tool
 SPIDERMON_ENABLED = True
