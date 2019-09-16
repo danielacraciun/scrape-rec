@@ -1,15 +1,24 @@
 from datetime import datetime
-from itertools import takewhile
 
 import scrapy
 from scrapy.utils.request import request_fingerprint
 
-from scrape_rec.items import RealEstateRentedApartmentItem
-
+from scrape_rec.loaders import BaseAdLoader
 from scrape_rec.utils import get_all_urls_from_httpcache
 
 
 class BaseRealEstateSpider(scrapy.Spider):
+
+    item_loader_class = BaseAdLoader
+
+    def get_attribute_values(self, response):
+        raise NotImplementedError
+
+    def is_product_url(self, url):
+        raise NotImplementedError
+
+    def load_particular_fields(self, loader, response):
+        return loader
 
     def start_requests(self):
         if hasattr(self, 'httpcache_only'):
@@ -21,66 +30,29 @@ class BaseRealEstateSpider(scrapy.Spider):
         else:
             yield from super().start_requests()
 
-    def get_attribute_values(self, response):
-        raise NotImplementedError
-
-    def process_title(self, title):
-        return title
-
-    def process_description(self, description):
-        return description
-
-    def process_ad_date(self, ad_date):
-        return ad_date
-
-    def process_price(self, response):
-        return int(response.xpath(self.price_xpath).extract_first()), 'EUR'
-
-    def process_item_additional_fields(self, item, response):
-        return item
-
     def process_link(self, response):
-        item = RealEstateRentedApartmentItem()
-        item['source_website'] = self.name
-        item['link'] = response.url
+        item_loader_class = self.item_loader_class
+        loader = item_loader_class(selector=response)
 
-        item['fingerprint'] = request_fingerprint(response.request)
+        loader.add_xpath('title', self.title_xpath)
+        loader.add_xpath('description', self.description_xpath)
 
-        title = response.xpath(self.title_xpath).extract_first().strip()
-        title = self.process_title(title)
-        item['title'] = title
+        loader.add_value('source_website', self.name)
+        loader.add_value('link', response.url)
+        loader.add_value('fingerprint', request_fingerprint(response.request))
+        loader.add_value('scraped_date', datetime.now())
 
-        description = ''.join(map(lambda line: line.strip(), response.xpath(self.description_xpath).extract()))
-        description = self.process_description(description)
-        item['description'] = description
+        loader.add_xpath('posted_date', self.date_xpath)
+        loader.add_xpath('price', self.price_xpath)
+        loader.add_xpath('currency', self.currency_xpath)
 
-        ad_date = None
-        if self.date_xpath:
-            try:
-                ad_date = response.xpath(self.date_xpath).extract()
-                ad_date = self.process_ad_date(' '.join(ad_date))
-            except:
-                self.logger.error('Problem with date xpath, falling back to current date')
-                ad_date = None
-
-        item['scraped_date'] = datetime.now()
-        item['posted_date'] = ad_date
-
-        item['price'], item['currency'] = self.process_price(response)
         available_attributes = self.get_attribute_values(response)
         for attr, site_value in self.attributes_mapping.items():
             value = available_attributes.get(site_value)
-            if attr == 'floor' and value in self.base_floors_mapping.keys():
-                value = self.base_floors_mapping.get(value)
-            elif value and attr in self.convert_to_int:
-                value = int(''.join(takewhile(str.isdigit, value)) or 0)
+            loader.add_value(attr, value)
 
-            if value is not None:
-                item[attr] = value
-
-        # in order to extract additional fields
-        item = self.process_item_additional_fields(item, response)
-        yield item
+        loader = self.load_particular_fields(loader, response)
+        yield loader.load_item()
 
     def parse(self, response):
         links = response.xpath(self.item_links_xpath).extract()

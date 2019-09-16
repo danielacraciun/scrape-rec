@@ -1,4 +1,3 @@
-import scrapy
 from scrapy_jsonschema.item import JsonSchemaItem
 
 
