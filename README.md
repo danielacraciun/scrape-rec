@@ -26,7 +26,11 @@ For debugging, to run scrapers manually:
     docker volume create httpcache
 
 ### Build the docker image:
+    Build the image for all scrapers
     docker build -t scraper .
+    Build the image for running individual scrapers
+    docker build -f Dockerfile-single-spider -t single_scraper .
+
 
 ### Run docker compose:
     docker-compose up -d
@@ -57,5 +61,10 @@ For debugging, to run scrapers manually:
     python setup_crontab.py
 
 ### This is the crontab command, set this in a user's crontab (the user must be in the docker group):
+    To run all scrapers you need only this line:
     * * * * * run-one docker run --network=host -v httpcache:/var/lib/httpcache/ scraper
+    To run individual scrapers you'll need one of these for each scraper:
+    * * * * * run-one docker run --network=host -v httpcache:/var/lib/httpcache/ -e spider_name=<spider name> single_scraper
+
+    Don't forget the backup script!
     * * * * * run-one /path/to/backup.sh
