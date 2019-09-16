@@ -4,6 +4,7 @@ Scrapy==1.6.0
 scrapy-jsonschema==0.1.0
 spidermon[monitoring,validation]
 psycopg2==2.8.2
+python-telegram-bot==12.1.0
 SQLAlchemy==1.3.3
 Unidecode==1.0.23
 

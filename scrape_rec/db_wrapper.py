@@ -1,25 +1,9 @@
 import sqlalchemy as sa
-
-from os import environ
 from sqlalchemy.ext.declarative import declarative_base
 
+from scrape_rec.settings import POSTGRES_DB, POSTGRES_DB_STRING
 
-POSTGRES_USER = 'postgres'
-POSTGRES_PASSWORD = environ.get('POSTGRES_PASSWORD')
-POSTGRES_HOST = 'localhost'
-POSTGRES_PORT = 5342
-POSTGRES_DB = 'realestate'
-
-
-db_string = 'postgres://{user}:{password}@{host}:{port}/{db}'.format(
-  user=POSTGRES_USER,
-  password=POSTGRES_PASSWORD,
-  host=POSTGRES_HOST,
-  port=POSTGRES_PORT,
-  db=POSTGRES_DB
-)
-
-db = sa.create_engine(db_string)
+db = sa.create_engine(POSTGRES_DB_STRING)
 base = declarative_base()
 
 
