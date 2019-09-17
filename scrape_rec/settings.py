@@ -1,3 +1,5 @@
+from os import environ
+
 BOT_NAME = 'scrape_rec'
 
 SPIDER_MODULES = ['scrape_rec.spiders']
@@ -24,7 +26,10 @@ SPIDERMON_ENABLED = True
 SPIDERMON_SPIDER_CLOSE_MONITORS = (
     'scrape_rec.monitors.SpiderCloseMonitorSuite',
 )
+
+MYEXT_ENABLED = True
 EXTENSIONS = {
+    'scrape_rec.extensions.SpiderBotCallback': 400,
     'spidermon.contrib.scrapy.extensions.Spidermon': 500,
 }
 
@@ -38,3 +43,22 @@ HTTPCACHE_DIR = '/var/lib/httpcache/'
 
 # Save some space
 HTTPCACHE_GZIP = True
+
+# Database settings
+POSTGRES_USER = 'postgres'
+POSTGRES_PASSWORD = environ.get('POSTGRES_PASSWORD')
+POSTGRES_HOST = environ.get('POSTGRES_HOST', 'localhost')
+POSTGRES_PORT = environ.get('POSTGRES_PORT', 5342)
+POSTGRES_DB = 'realestate'
+POSTGRES_DB_STRING = 'postgres://{user}:{password}@{host}:{port}/{db}'.format(
+  user=POSTGRES_USER,
+  password=POSTGRES_PASSWORD,
+  host=POSTGRES_HOST,
+  port=POSTGRES_PORT,
+  db=POSTGRES_DB
+)
+
+
+# Bot settings
+BOT_USER_SETTINGS_FILE = environ.get('BOT_USER_SETTINGS_FILE')
+BOT_TOKEN = environ.get('BOT_TOKEN')
