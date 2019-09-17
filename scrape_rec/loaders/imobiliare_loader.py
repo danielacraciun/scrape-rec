@@ -11,5 +11,5 @@ class ImobiliareAdLoader(BaseAdLoader):
     floor_out = Compose(TakeFirst(), imobiliare_splitter, lower_string, floor_mapper)
     posted_date_out = Compose(TakeFirst(), take_last_splitter, parse_date)
     surface_out = Compose(TakeFirst(), take_first_splitter, int)
-    parking_out = number_to_bool
-    terrace_out = number_to_bool
+    parking_out = Compose(TakeFirst(), number_to_bool)
+    terrace_out = Compose(TakeFirst(), number_to_bool)

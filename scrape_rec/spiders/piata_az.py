@@ -41,18 +41,12 @@ class PiataAZSpider(BaseRealEstateSpider):
         value_list = response.xpath('//div/ul/li/div/text()').extract()
         clean_value_list = []
         for value in value_list:
-            if 'mp' in value:
-                clean_value_list.append(value.split()[0])
-                continue
-            if 'etaj' in value.lower():
-                clean_value_list.append(value.split()[1].lower())
-                continue
             clean_value_list.append(value)
         return {attr: val for attr, val in zip(attr_list, clean_value_list)}
 
     def load_particular_fields(self, loader, response):
         urlpath = urlparse(response.meta['start_url']).path
         if 'garsoniere' in urlpath:
-            loader.add_value('number_of_rooms', 1)
+            loader.add_value('number_of_rooms', '1')
 
         return loader

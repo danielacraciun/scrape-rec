@@ -14,8 +14,9 @@ class PiataAZAdLoader(BaseAdLoader):
     currency_out = Compose(
         TakeFirst(), clean_whitespace, missing_price_filter_with_currency, take_second_splitter, currency_mapper
     )
-    floor_out = Compose(TakeFirst(), take_first_splitter, lower_string, floor_mapper)
+    floor_out = Compose(TakeFirst(), take_second_splitter, lower_string, floor_mapper)
     posted_date_out = Compose(TakeFirst(), piata_az_parse_date)
     parking_out = Compose(TakeFirst(), lambda kw: yesno_boolean_mapper.get(kw))
-    terrace_out = number_to_bool
+    terrace_out = Compose(TakeFirst(), number_to_bool)
     source_offer_out = Compose(TakeFirst(), lower_string)
+    surface_out = Compose(TakeFirst(), take_first_splitter, int)
