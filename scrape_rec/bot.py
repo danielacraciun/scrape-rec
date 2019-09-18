@@ -1,4 +1,5 @@
 import telegram
+import json
 
 from scrape_rec.db_wrapper import RealestateApartment, get_postgres_session, UserSettings
 from scrape_rec.settings import BOT_TOKEN
@@ -15,8 +16,10 @@ def apply_filter(attr, attr_value, current_results, column):
     return current_results
 
 
-def build_message_text(rows):
-    return ''.join(
+def build_messages(rows):
+    split_rows = [rows[i:i + 5] for i in range(0, len(rows), 5)]
+
+    return [''.join(
         '🏡 {}\nPrice: {}{}{}{}{}\nLink: {}\n\n'.format(
             row.title, row.price,
             ' Surface: {}'.format(row.surface) if row.surface else '',
@@ -24,8 +27,8 @@ def build_message_text(rows):
             ' Floor: {}'.format(row.floor) if row.floor else '',
             ' Neighborhood: {}'.format(row.neighborhood) if row.neighborhood is not 'not found' else '',
             row.link)
-        for row in rows
-    )
+        for row in chunk
+    ) for chunk in split_rows]
 
 
 def get_results_for_user(options, since):
@@ -46,7 +49,7 @@ def get_results_for_user(options, since):
         if options.get(attr):
             latest_listings = apply_filter(attr, options[attr], latest_listings, corresponding_columns[attr])
 
-    return build_message_text(latest_listings.all())
+    return build_messages(latest_listings.all())
 
 
 def send_message(to, listings):
@@ -55,6 +58,6 @@ def send_message(to, listings):
 
 def send_listing_notifications(since):
     for user in session.query(UserSettings).all():
-        msg = get_results_for_user(user.user_settings, since)
-        if msg:
+        msgs = get_results_for_user(json.loads(user.user_settings), since)
+        for msg in msgs:
             send_message(user.chat_id, msg)
