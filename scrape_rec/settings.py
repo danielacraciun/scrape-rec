@@ -60,5 +60,4 @@ POSTGRES_DB_STRING = 'postgres://{user}:{password}@{host}:{port}/{db}'.format(
 
 
 # Bot settings
-BOT_USER_SETTINGS_FILE = environ.get('BOT_USER_SETTINGS_FILE')
 BOT_TOKEN = environ.get('BOT_TOKEN')

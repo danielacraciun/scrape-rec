@@ -35,6 +35,13 @@ class RealestateApartment(base):
     link = sa.Column(sa.String)
 
 
+class UserSettings(base):
+    __tablename__ = 'telegram_bot_user_settings'
+
+    chat_id = sa.Column(sa.Integer, nullable=False, primary_key=True)
+    user_settings = sa.Column(sa.String)
+
+
 def get_postgres_session():
     # To fix db table changes errors enable once
     # db.execute('DROP TABLE realestate;')

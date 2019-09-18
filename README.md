@@ -1,14 +1,22 @@
 # Deployment:
-Remember to set POSTGRES_PASSWORD as environment variable before starting!
+Remember to set database and bot specific variables as environment variable before starting!
 
-Run: `export POSTGRES_PASSWORD=<pass>`
+Database:
+- POSTGRES_PASSWORD
+- POSTGRES_HOST (if needed)
+- POSTGRES_PORT (if needed)
+
+Bot:
+- BOT_USER_SETTINGS_FILE
+- BOT_TOKEN
+
 
 #### Zero to hero steps:
 1. Install the following:
     * git
     * docker
     * run-one
-2. Clone the repostory
+2. Clone the repository
 3. Build the scraper docker image
 4. Create pgdata and httpcache docker volumes
 
@@ -26,14 +34,11 @@ For debugging, to run scrapers manually:
     docker volume create httpcache
 
 ### Build the docker image:
-    Build the image for all scrapers
+    # Build the image for all scrapers
     docker build -t scraper .
-    Build the image for running individual scrapers
+    
+    # Build the image for running individual scrapers
     docker build -f Dockerfile-single-spider -t single_scraper .
-
-
-### Run docker compose:
-    docker-compose up -d
 
 ### To run postgres only (on other port but same volume):
     docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=<pass> -e POSTGRES_DB=realestate -e PGDATA=/var/lib/postgresql/data -p 5345:5432 -d postgres
@@ -44,7 +49,7 @@ For debugging, to run scrapers manually:
 ### Restoring psql backups
     cat <dump_name>.sql | docker exec -i <docker-postgres-container> psql -U postgres -W -d realestate
     
-### To rescrape all urls from httpcache you need to edit the spider name in Dockerfile-only-httpcache and then:
+### To rescrape all urls from httpcache (you need to edit the spider name in Dockerfile-only-httpcache first):
     docker build -t scraper_only_httpcache . -f Dockerfile-only-httpcache
     docker run --network=host -v httpcache:/var/lib/httpcache/ scraper_only_httpcache
 

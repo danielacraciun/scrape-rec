@@ -1,8 +1,7 @@
-import pickle
 import telegram
 
-from scrape_rec.db_wrapper import RealestateApartment, get_postgres_session
-from scrape_rec.settings import BOT_USER_SETTINGS_FILE, BOT_TOKEN
+from scrape_rec.db_wrapper import RealestateApartment, get_postgres_session, UserSettings
+from scrape_rec.settings import BOT_TOKEN
 
 bot = telegram.Bot(token=BOT_TOKEN)
 session = get_postgres_session()
@@ -55,11 +54,7 @@ def send_message(to, listings):
 
 
 def send_listing_notifications(since):
-    with open(BOT_USER_SETTINGS_FILE, "rb") as f:
-        user_settings = pickle.load(f)
-
-    for user in user_settings['user_data']:
-        options = user_settings['user_data'][user]
-        msg = get_results_for_user(options, since)
+    for user in session.query(UserSettings).all():
+        msg = get_results_for_user(user.user_settings, since)
         if msg:
-            send_message(user, msg)
+            send_message(user.chat_id, msg)
