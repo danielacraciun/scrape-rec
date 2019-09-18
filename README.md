@@ -41,7 +41,17 @@ For debugging, to run scrapers manually:
     docker build -f Dockerfile-single-spider -t single_scraper .
 
 ### To run postgres only (on other port but same volume):
-    docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=<pass> -e POSTGRES_DB=realestate -e PGDATA=/var/lib/postgresql/data -p 5345:5432 -d postgres
+
+Please see the docker_env.list file and set the following:
+    
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=<pass>
+    POSTGRES_DB=realestate            // database name
+    PGDATA=/var/lib/postgresql/data   // postgres docker volume mount point
+
+Then, you can use this command to start the postgres instance with the path to the env file:
+
+    docker run --env-file "<path/to/docker_env.list>"  -p 5345:5432 -d postgres
 
 ### To run scrapers only (make sure you have postgres and httpcache volume up first):
     docker run --network=host -v httpcache:/var/lib/httpcache/ scraper
