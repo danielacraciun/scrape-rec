@@ -1,0 +1,5 @@
+POSTGRES_PASSWORD=<your passowrd>
+POSTGRES_USER=postgres
+POSTGRES_DB=realestate
+PGDATA=/var/lib/postgresql/data
+BOT_TOKEN=<your token>

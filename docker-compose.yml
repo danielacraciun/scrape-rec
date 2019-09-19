@@ -3,11 +3,8 @@ services:
 
   postgres:
     image: postgres
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=realestate
-      - PGDATA=/var/lib/postgresql/data
+    env_file:
+     - ./docker_env.list
     ports:
       - 5435:5432
 
