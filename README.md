@@ -83,3 +83,8 @@ Then, you can use this command to start the postgres instance with the path to t
 
     Don't forget the backup script!
     * * * * * run-one /path/to/backup.sh
+
+Disclaimer:
+This software and the data gathered/being sent is for my personal use only. I am not responsible for any damages cause by proper/improper use of the software.
+This software is in development phase and subject to change. 
+Any data retrieved or stored does not contain any personal identifying information. Please contact me concerning data usage clarification/requests of removal.
