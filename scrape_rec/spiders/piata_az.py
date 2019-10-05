@@ -39,10 +39,7 @@ class PiataAZSpider(BaseRealEstateSpider):
     def get_attribute_values(self, response):
         attr_list = response.xpath('//div/ul/li/div/b/text()').extract()
         value_list = response.xpath('//div/ul/li/div/text()').extract()
-        clean_value_list = []
-        for value in value_list:
-            clean_value_list.append(value)
-        return {attr: val for attr, val in zip(attr_list, clean_value_list)}
+        return {attr: val for attr, val in zip(attr_list, value_list)}
 
     def load_particular_fields(self, loader, response):
         urlpath = urlparse(response.meta['start_url']).path

@@ -1,56 +1,17 @@
 from unidecode import unidecode
 
+from scrape_rec.keywords import keywords, amenities
 from scrape_rec.db_wrapper import get_postgres_session, RealestateApartment
+from scrape_rec.settings import CURRENT_CITY
 
 
 class NeighborhoodFinderPipeline(object):
-    neighborhoods = [
-        'andrei muresanu',
-        'bulgaria',
-        'buna ziua',
-        'centru',
-        'dambul rotund',
-        'gara',
-        'horea',
-        'manastur',
-        'grigorescu',
-        'gruia',
-        'iris',
-        'intre lacuri',
-        'marasti',
-        'someseni',
-        'zorilor',
-        'sopor',
-        'faget',
-        'borhanci',
-        'becas',
-        'expo transilvania',
-        'iulius',
-        'vivo',
-        'polus',
-        'floresti',
-        'viteazu',
-        'sigma',
-        'piata unirii',
-        'dorobantilor',
-        'the office',
-        'plopilor',
-        'calea turzii',
-        'baciu',
-        'gheorgheni',
-        'interservisan',
-        'ultracentral',
-        'europa',
-        'muzeului',
-        'calea baciului',
-        'titulescu',
-        'usamv',
-    ]
+
+    neighborhoods = keywords[CURRENT_CITY]['neighborhoods']
 
     def process_item(self, item, spider):
         if item.get('neighborhood'):
             return item
-
         cleaned_title = unidecode(item['title'])
         for neighborhood in self.neighborhoods:
             if neighborhood in cleaned_title:
@@ -70,16 +31,9 @@ class NeighborhoodFinderPipeline(object):
 class DescriptionAnalysePipeline(object):
     def process_item(self, item, spider):
         cleaned_desc = unidecode(item['description'])
-
-        if item.get('parking') is None:
-            item['parking'] = any(word in cleaned_desc for word in ['parcare', 'garaj'])
-
-        if item.get('terrace') is None:
-            item['terrace'] = any(word in cleaned_desc for word in ['terasa', 'balcon', 'balcoane'])
-
-        if item.get('cellar') is None:
-            item['cellar'] = any(word in cleaned_desc for word in ['pivnita', 'boxa'])
-
+        for amenity in amenities:
+            if item.get(amenity) is None:
+                item[amenity] = any(word in cleaned_desc for word in keywords[CURRENT_CITY][amenity])
         return item
 
 

@@ -15,6 +15,7 @@ ITEM_PIPELINES = {
 }
 
 # Be nice!
+USER_AGENT = environ.get('SCRAPING_USER_AGENT')
 DOWNLOAD_DELAY = 3  # Average time between sending requests
 RANDOMIZE_DOWNLOAD_DELAY = True  # Default for 0.5 to 1.5 times DOWNLOAD_DELAY
 AUTOTHROTTLE_ENABLED = True  # Enable built-in autothrottle extension
@@ -27,7 +28,6 @@ SPIDERMON_SPIDER_CLOSE_MONITORS = (
     'scrape_rec.monitors.SpiderCloseMonitorSuite',
 )
 
-MYEXT_ENABLED = True
 EXTENSIONS = {
     'scrape_rec.extensions.SpiderBotCallback': 400,
     'spidermon.contrib.scrapy.extensions.Spidermon': 500,
@@ -39,17 +39,18 @@ EXTENSIONS = {
 
 # Make sure this is set to the same value as the
 # docker-compose volume 'httpcache' for persistance
-HTTPCACHE_DIR = '/var/lib/httpcache/'
+# HTTPCACHE_DIR = '/var/lib/httpcache/'
 
 # Save some space
-HTTPCACHE_GZIP = True
+# HTTPCACHE_GZIP = True
 
 # Database settings
 POSTGRES_USER = 'postgres'
 POSTGRES_PASSWORD = environ.get('POSTGRES_PASSWORD')
 POSTGRES_HOST = environ.get('POSTGRES_HOST', 'localhost')
-POSTGRES_PORT = environ.get('POSTGRES_PORT', 5342)
-POSTGRES_DB = 'realestate'
+POSTGRES_PORT = environ.get('POSTGRES_PORT', 5345)
+POSTGRES_DB = 'ads'
+
 POSTGRES_DB_STRING = 'postgres://{user}:{password}@{host}:{port}/{db}'.format(
   user=POSTGRES_USER,
   password=POSTGRES_PASSWORD,
@@ -58,6 +59,8 @@ POSTGRES_DB_STRING = 'postgres://{user}:{password}@{host}:{port}/{db}'.format(
   db=POSTGRES_DB
 )
 
-
 # Bot settings
 BOT_TOKEN = environ.get('BOT_TOKEN')
+
+# Other customizations
+CURRENT_CITY = 'cluj-napoca'

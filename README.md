@@ -1,5 +1,15 @@
+## Quick get started guide:
+1. Create your Python virtualenv
+2. Run this:
+```
+docker run -e POSTGRES_USER=postgres -e POSTGRESS_PASSWORD=<pass> -e POSTGRES_DB=ads -p 5345:5432 -d postgres
+```
+3. (Optional) Get a Telegram Bot token & add it to `.env`
+4. Complete the `.env` as needed. Run `export $(cat .env)`
+5. Run your scraper with: `scrapy crawl <scraper_name>
+
 # Deployment:
-Remember to set database and bot specific variables as environment variable before starting!
+Remember to set database and bot specific variables as environment variable before starting! Open .env file and complete it, then run `source .env`
 
 Database:
 - POSTGRES_PASSWORD
