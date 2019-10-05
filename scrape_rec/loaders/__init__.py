@@ -1,4 +1,4 @@
-from .base_loader import BaseAdLoader
+from .base_realestate_loader import BaseRealEstateAdLoader
 from .imobiliare_loader import ImobiliareAdLoader
 from .lajumate_loader import LajumateAdLoader
 from .olx_loader import OlxAdLoader

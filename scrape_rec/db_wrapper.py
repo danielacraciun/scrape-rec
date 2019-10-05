@@ -1,15 +1,13 @@
 import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
 
-from scrape_rec.settings import POSTGRES_DB, POSTGRES_DB_STRING
+from scrape_rec.settings import POSTGRES_DB_STRING
 
 db = sa.create_engine(POSTGRES_DB_STRING)
-base = declarative_base()
+Base = declarative_base()
 
 
-class RealestateApartment(base):
-    __tablename__ = POSTGRES_DB
-
+class BaseAdMixin:
     fingerprint = sa.Column(sa.String, primary_key=True)
 
     # Mandatory
@@ -21,6 +19,14 @@ class RealestateApartment(base):
 
     # Nullable
     posted_date = sa.Column(sa.DateTime)
+    source_website = sa.Column(sa.String)
+    link = sa.Column(sa.String)
+
+
+class RealestateApartment(Base, BaseAdMixin):
+    __tablename__ = 'realestate'
+
+    # Nullable
     partitioning = sa.Column(sa.String)
     surface = sa.Column(sa.Integer)
     building_year = sa.Column(sa.String)
@@ -29,13 +35,11 @@ class RealestateApartment(base):
     terrace = sa.Column(sa.Boolean)
     parking = sa.Column(sa.Boolean)
     cellar = sa.Column(sa.Boolean)
-    source_website = sa.Column(sa.String)
     source_offer = sa.Column(sa.String)
     neighborhood = sa.Column(sa.String)
-    link = sa.Column(sa.String)
 
 
-class UserSettings(base):
+class UserSettings(Base):
     __tablename__ = 'telegram_bot_user_settings'
 
     chat_id = sa.Column(sa.Integer, nullable=False, primary_key=True)
@@ -43,8 +47,6 @@ class UserSettings(base):
 
 
 def get_postgres_session():
-    # To fix db table changes errors enable once
-    # db.execute('DROP TABLE realestate;')
-    base.metadata.create_all(db)
+    Base.metadata.create_all(db)
     Session = sa.orm.sessionmaker(db)
     return Session()
