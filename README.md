@@ -8,6 +8,9 @@ docker run -e POSTGRES_USER=postgres -e POSTGRESS_PASSWORD=<pass> -e POSTGRES_DB
 4. Complete the `.env` as needed. Run `export $(cat .env)`
 5. Run your scraper with: `scrapy crawl <scraper_name>
 
+## Quick note:
+This makes use of a notification bot, through the `SpiderBotCallback`, you can disable it in the settings if you want no bot interaction (just data gathering).
+
 # Deployment:
 Remember to set database and bot specific variables as environment variable before starting! Open .env file and complete it, then run `source .env`
 
