@@ -28,14 +28,14 @@ Bot:
 1. Install the following:
     * git
     * docker
-    * run-one
+    * run-one (optional)
 2. Clone the repository
 3. Build the scraper docker image
 4. Create pgdata and httpcache docker volumes
 
-For debugging, to run scrapers manually:
+Run scrapers manually:
 1. Install:
-    * python2 pip
+    * pip
     * virtualenvwrapper
 2. Create python3 virtualenvironment
 3. Install requirements.txt
@@ -64,7 +64,7 @@ Please see the docker_env.list file and set the following:
 
 Then, you can use this command to start the postgres instance with the path to the env file:
 
-    docker run --env-file "<path/to/docker_env.list>"  -p 5345:5432 -d postgres
+    docker run --env-file "<path/to/docker_env.list>"  -p <exposed port>:5432 -d postgres
 
 ### To run scrapers only (make sure you have postgres and httpcache volume up first):
     docker run --network=host -v httpcache:/var/lib/httpcache/ scraper
@@ -97,7 +97,8 @@ Then, you can use this command to start the postgres instance with the path to t
     Don't forget the backup script!
     * * * * * run-one /path/to/backup.sh
 
-Disclaimer:
+### Disclaimer:
+
 This software and the data gathered/being sent is for my personal use only. I am not responsible for any damages cause by proper/improper use of the software.
 This software is in development phase and subject to change. 
 Any data retrieved or stored does not contain any personal identifying information. Please contact me concerning data usage clarification/requests of removal.
