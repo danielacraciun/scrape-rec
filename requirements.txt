@@ -1,6 +1,6 @@
 # Scraping
 dateparser==0.7.1
-Scrapy==1.6.0
+Scrapy==2.6.2
 scrapy-jsonschema==0.1.0
 spidermon[monitoring,validation]
 psycopg2==2.8.2
